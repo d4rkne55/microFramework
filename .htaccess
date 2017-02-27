@@ -1,0 +1,7 @@
+RewriteEngine on
+
+# don't rewrite URLs that point to existing files
+# else the assets won't be available, as it redirects everything to index.php
+RewriteCond %{REQUEST_FILENAME} !-f
+
+RewriteRule ^(.*)$ index.php
