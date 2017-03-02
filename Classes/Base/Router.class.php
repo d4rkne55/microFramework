@@ -2,10 +2,8 @@
 
 class Router
 {
-    const PROJECT_PATH = '/microFramework/';
-
     /**
-     * This associative array consists of paths, which are regular expressions,
+     * This associative array consists of paths, with named variables in the form ($variable),
      * and of the corresponding methods to be called when the path matches.
      * Paths are handled case-insensitive
      *
@@ -14,40 +12,46 @@ class Router
      *
      * @var array $routes
      */
-    protected $routes = array(
-        '' => array('Example', 'showWelcomePage'),
-        '(\w+)' => array('Example', 'showWithInfo'),
-        '(\w+)/(\d+)' => array('Example', 'showWithInfo')
+    private $routes = array(
+        '' => array(
+            Example::class, 'showWelcomePage'
+        ),
+        '($category)' => array(
+            Example::class, 'showWithInfo'
+        ),
+        '($category)/($id)' => array(
+            Example::class, 'showWithInfo'
+        )
     );
 
     /**
-     * This variable defines the names/index of the parameters to be passed to the method,
-     * so you can call $query['id'] in the method to get the first parameter match, the id, more meaningful than $query[0]
+     * This array defines the regex to be matched for the variables in the route
+     * Slashes will get escaped, no need to do that manually
      *
-     * @var array $paramNames
+     * @var array $varConditions
      */
-    private $paramNames = array(
-        'category',
-        'id'
+    private $varConditions = array(
+        'category' => '\w+',
+        'id'       => '\d+'
     );
 
 
     public function __construct() {
-        $relativeUrl = $_SERVER['REQUEST_URI'];
-        $request = new Request($relativeUrl);
-
-        $path = $request->get('path');
-        $relativePath = str_replace(self::PROJECT_PATH, '', $path);
+        // get path relative to the project URL path
+        $path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+        $relativePath = str_replace(ROOT, '', $path);
 
         foreach ($this->routes as $route => $fnc) {
-            $route = str_replace('/', '\/', $route);
-            if (preg_match('/^' . $route . '\/?$/i', $relativePath, $matches)) {
-                // remove full match from matches, not needed
+            $routeRegex = $this->buildRegexForRoute($route);
+
+            if (preg_match("/$routeRegex/i", $relativePath, $matches)) {
+                // remove full match (first element) from matches, not needed
                 array_shift($matches);
 
-                // give matches/parameters a named index from paramNames
+                // give matches/parameters a named index (using variable name from route)
                 $params = array();
-                foreach ($this->paramNames as $i => $name) {
+                $paramNames = array_keys($this->varConditions);
+                foreach ($paramNames as $i => $name) {
                     $params[$name] = isset($matches[$i]) ? $matches[$i] : '';
                 }
                 // add POST data to the params array, if POST request
@@ -63,12 +67,24 @@ class Router
                     $fnc = array($class, $fnc[1]);
                 }
 
-                // instantiate the View class, to be able using it without instantiating it manually in every method
-                $view = new View();
-
-                call_user_func($fnc, $view, $params);
+                call_user_func($fnc, $params);
                 break;
             }
         }
+    }
+
+    private function buildRegexForRoute($route) {
+        // replace variables with corresponding regex, including parentheses for matching
+        $route = preg_replace_callback('/\(\$(\w+)\)/', function($matches) {
+            return '(' . $this->varConditions[ $matches[1] ] . ')';
+        }, $route);
+
+        // escape slashes
+        $route = str_replace('/', '\/', $route);
+
+        // allow trailing slash, whole string must match (^$)
+        $route = '^' . $route . '\/?$';
+
+        return $route;
     }
 }

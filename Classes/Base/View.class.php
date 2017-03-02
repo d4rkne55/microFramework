@@ -16,7 +16,7 @@ class View
         $this->templateDir = $templateDir;
 
         if (!file_exists($this->templateDir)) {
-            throw new Exception("Path doesn't exist.");
+            throw new Exception("Template directory doesn't exist.");
         }
     }
 

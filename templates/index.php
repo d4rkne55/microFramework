@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <title>Welcome!</title>
-    <link rel="stylesheet" href="/microFramework/css/style.css">
+    <link rel="stylesheet" href="<?= ROOT ?>css/style.css">
 </head>
 <body>
     <h1>microFramework Test</h1>

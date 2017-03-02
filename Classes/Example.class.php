@@ -1,12 +1,12 @@
 <?php
 
-class Example
+class Example extends Base
 {
-    public function showWelcomePage(View $view, array $query, $showDebug = false, $handler = __METHOD__) {
+    public function showWelcomePage(array $query, $showDebug = false, $handler = __METHOD__) {
         $request = new Request($_SERVER['REQUEST_URI']);
-        $relativePath = str_replace('/microFramework', '', $request->get('path'));
+        $relativePath = str_replace(ROOT, '/', $request->get('path'));
 
-        $view->render('index.php', array(
+        $this->view->render('index.php', array(
             'uri' => $relativePath,
             'method' => $handler,
             'query' => $query,
@@ -14,7 +14,7 @@ class Example
         ));
     }
 
-    public function showWithInfo(View $view, array $query) {
-    	$this->showWelcomePage($view, $query, true, __METHOD__);
+    public function showWithInfo(array $query) {
+    	$this->showWelcomePage($query, true, __METHOD__);
     }
 }
