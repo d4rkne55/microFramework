@@ -11,9 +11,8 @@ uploading or even deleting (via FTP) the files from the server - but well,
 that's a one time job, normally.
 IMO the sheer amount of files just didn't fit with my small project.
 
-So I thought about throwing framewoks overboard.
-But then it came to my mind that I had time and could create
-my *own* basic (micro) framework.
+So I thought about throwing framewoks overboard (never heard of micro frameworks before).
+But then it came to my mind that I had time and could create my *own* basic (micro) framework.
 
 And here I am. :D
 
@@ -37,5 +36,6 @@ And here I am. :D
 ...
 
 ### Request
+
 ...
 -->
