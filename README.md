@@ -1,6 +1,7 @@
 # microFramework
 
 When I worked on a new project based on Symfony, I started to like Symfony.
+Not too long and I ported one of my projects to Symfony, just to see how my code would look like then.
 There were just two problems:
 
 * First, it's big with around 7.000 files
@@ -24,18 +25,67 @@ And here I am. :D
 * View class
 * Request class
 
-<!--
+
+## Structure
+
+- **Classes**
+  Here the class files for your project should be placed.
+  The `Example.class.php` is such
+  
+- **Classes/Base**
+  This is the place for the internal classes of the framework.
+  Eg. the `Router.class.php`
+  
+- **templates**
+  This is the default location it searches for templates.
+  More info at [View usage](#custom-tpl-dir)
+
+
 ## Usage
 
 ### Routing
 
-...
+Currently the routes need to be defined in the Router class itself.
+Everything should be explained in there.
 
 ### View
 
-...
+To render/include a template you can use the `render()` method of the View class.
+
+Similar to Symfony, the first parameter is the file name and the second parameter
+can be an associative array with variables to pass to the template.
+Look at the `Example.class.php` for an example.
+
+<a name="custom-tpl-dir"></a> **Tip:** If you want to use another folder name for your templates,
+edit the `Base` class by passing the folder name to the initialization of the View class.
+
+*You need to extend your class with the `Base` class to have this class available.*
+
+### Database
+
+For connecting to a database you just need to set the connection parameters in the `Base` class.
+Like the View class, you access it via `$this->DB`.
+This framework uses [PDO](http://php.net/manual/de/book.pdo.php) by default.
+You may need to take a look at a [tutorial](https://phpdelusions.net/pdo) first.
+
+*You need to extend your class with the `Base` class to have this class available.*
 
 ### Request
 
-...
--->
+This framework also contains a `Request` class for getting info about an Request/URL.
+By default, without parameters, it takes the current page.
+
+The info that can be get by the `get()` method is the same as in the
+[manual of parse_url()](http://php.net/manual/en/function.parse-url.php#refsect1-function.parse-url-returnvalues),
+including the alias *'protocol'* for *'scheme'*.
+
+Examples:
+```php
+$request = new Request('https://www.google.de/?q=search');
+
+$path  = $request->get('path');
+$https = ($request->get('protocol') == 'https');
+$hasId = $request->query->has('q');
+$id    = $request->query->q;
+$query = $request->getFullQuery();
+```

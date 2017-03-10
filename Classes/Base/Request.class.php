@@ -7,9 +7,13 @@ class Request
     private $currentVar;
 
 
-    public function __construct($url) {
+    public function __construct($url = null) {
+        if (!$url) {
+            $url = $_SERVER['REQUEST_URI'];
+        }
+
         $defaults = array(
-            'protocol' => '',
+            'protocol' => 'http',
             'port' => 80,
             'path' => '/'
         );

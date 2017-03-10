@@ -14,7 +14,7 @@ class Base
     private $dbHost = 'localhost';
     private $dbUser = 'root';
     private $dbPass = '';
-    private $dbName = 'money_manager';
+    private $dbName = 'database';
 
 
     public function __construct() {
