@@ -1,7 +1,7 @@
 # microFramework
 
-When I worked on a new project based on Symfony, I started to like Symfony.
-Not too long and I ported one of my projects to Symfony, just to see how my code would look like then.
+When I worked on a new project based on Symfony, I started to like Symfony.  
+Not too long and I ported one of my projects to Symfony, just to see how my code would look like then.  
 There were just two problems:
 
 * First, it's big with around 7.000 files
@@ -28,16 +28,16 @@ And here I am. :D
 
 ## Structure
 
-- **Classes**
-  Here the class files for your project should be placed.
+- **Classes**  
+  Here the class files for your project should be placed.  
   The `Example.class.php` is such
   
-- **Classes/Base**
-  This is the place for the internal classes of the framework.
+- **Classes/Base**  
+  This is the place for the internal classes of the framework.  
   Eg. the `Router.class.php`
   
-- **templates**
-  This is the default location it searches for templates.
+- **templates**  
+  This is the default location it searches for templates.  
   More info at [View usage](#custom-tpl-dir)
 
 
@@ -45,7 +45,7 @@ And here I am. :D
 
 ### Routing
 
-Currently the routes need to be defined in the Router class itself.
+Currently the routes need to be defined in the Router class itself.  
 Everything should be explained in there.
 
 ### View
@@ -72,11 +72,11 @@ You may need to take a look at a [tutorial](https://phpdelusions.net/pdo) first.
 
 ### Request
 
-This framework also contains a `Request` class for getting info about an Request/URL.
+This framework also contains a `Request` class for getting info about an Request/URL.  
 By default, without parameters, it takes the current page.
 
 The info that can be get by the `get()` method is the same as in the
-[manual of parse_url()](http://php.net/manual/en/function.parse-url.php#refsect1-function.parse-url-returnvalues),
+[manual of parse_url()](http://php.net/manual/en/function.parse-url.php#refsect1-function.parse-url-returnvalues),  
 including the alias *'protocol'* for *'scheme'*.
 
 Examples:
