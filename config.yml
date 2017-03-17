@@ -1,0 +1,29 @@
+# setting database to null (~) prevents the automatic connection to the database
+db_connection:
+    host: localhost
+    user: root
+    pass: ~
+    database: ~
+
+routing:
+    # This array consists of paths, with named variables in the form ($variable),
+    # and of the corresponding methods to be called when the path matches.
+    #
+    # Paths are handled case-insensitive
+    # The handlers are defined like in PHP code, non-static methods get instantiated automatically
+    routes:
+        -
+            pattern: ''
+            handler: Example->showWelcomePage
+        -
+            pattern: '($category)'
+            handler: Example->showWithInfo
+        -
+            pattern: '($category)/($id)'
+            handler: Example->showWithInfo
+
+    # This array defines the regex to be matched for the variables in the route
+    # Slashes will get escaped, don't do that manually
+    conditions:
+        category: '\w+'
+        id:       '\d+'

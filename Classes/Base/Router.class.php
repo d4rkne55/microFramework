@@ -2,47 +2,19 @@
 
 class Router
 {
-    /**
-     * This associative array consists of paths, with named variables in the form ($variable),
-     * and of the corresponding methods to be called when the path matches.
-     * Paths are handled case-insensitive
-     *
-     * Static methods need to be in the form 'Class::staticMethod' and methods needing the class to be instantiated
-     * need to be an array in the following form: array('Class', 'method')
-     *
-     * @var array $routes
-     */
-    private $routes = array(
-        '' => array(
-            Example::class, 'showWelcomePage'
-        ),
-        '($category)' => array(
-            Example::class, 'showWithInfo'
-        ),
-        '($category)/($id)' => array(
-            Example::class, 'showWithInfo'
-        )
-    );
-
-    /**
-     * This array defines the regex to be matched for the variables in the route
-     * Slashes will get escaped, no need to do that manually
-     *
-     * @var array $varConditions
-     */
-    private $varConditions = array(
-        'category' => '\w+',
-        'id'       => '\d+'
-    );
+    /** @var ConfigHelper $config */
+    private $config = array();
 
 
     public function __construct() {
+        $this->config = new ConfigHelper('config.yml');
+
         // get path relative to the project URL path
         $path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
         $relativePath = str_replace(ROOT, '', $path);
 
-        foreach ($this->routes as $route => $fnc) {
-            $routeRegex = $this->buildRegexForRoute($route);
+        foreach ($this->config->get('routing:routes') as $route) {
+            $routeRegex = $this->buildRegexForRoute($route['pattern']);
 
             if (preg_match("/$routeRegex/i", $relativePath, $matches)) {
                 // remove full match (first element) from matches, not needed
@@ -50,10 +22,11 @@ class Router
 
                 // give matches/parameters a named index (using variable name from route)
                 $params = array();
-                $paramNames = array_keys($this->varConditions);
+                $paramNames = array_keys($this->config->get('routing:conditions'));
                 foreach ($paramNames as $i => $name) {
                     $params[$name] = isset($matches[$i]) ? $matches[$i] : '';
                 }
+
                 // add POST data to the params array, if POST request
                 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     foreach ($_POST as $var => $value) {
@@ -62,21 +35,26 @@ class Router
                 }
 
                 // for non-static methods, create a class instance first
-                if (is_array($fnc)) {
-                    $class = new $fnc[0]();
-                    $fnc = array($class, $fnc[1]);
+                $callable = $route['handler'];
+                if (is_array($callable)) {
+                    $class = new $callable['class']();
+                    $callable = array($class, $callable['method']);
                 }
 
-                call_user_func($fnc, $params);
+                call_user_func($callable, $params);
                 break;
             }
         }
     }
 
     private function buildRegexForRoute($route) {
+        $varConditions = $this->config->get('routing:conditions');
+
         // replace variables with corresponding regex, including parentheses for matching
-        $route = preg_replace_callback('/\(\$(\w+)\)/', function($matches) {
-            return '(' . $this->varConditions[ $matches[1] ] . ')';
+        $route = preg_replace_callback('/\(\$(\w+)\)/', function($matches) use ($varConditions) {
+            $var = $matches[1];
+
+            return '(' . $varConditions[$var] . ')';
         }, $route);
 
         // escape slashes

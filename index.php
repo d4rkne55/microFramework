@@ -1,16 +1,17 @@
 <?php
 // get project URL path relative to the server document root
 $urlPath = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-$projectDir = basename(getcwd());
-$root = explode($projectDir, $urlPath);
-$root = $root[0] . "$projectDir/";
+$projectDir = basename(__DIR__);
+$dirPos = strpos($urlPath, $projectDir);
+$root = substr($urlPath, 0, $dirPos) . $projectDir;
 
-define('ROOT', $root);
+define('ROOT', $root. '/');
 
 
 // this variable defines the folders which contain Class files, relative to this file
 $classDirs = array(
     'Classes/Base',
+    'Classes/Vendor',
     'Classes'
 );
 

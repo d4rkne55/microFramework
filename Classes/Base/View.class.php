@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Basic MVC class
+ * Basic class for templating
  */
 class View
 {
@@ -24,7 +24,7 @@ class View
      * Renders template with passed variables
      *
      * @param string $template  filename of the template to render
-     * @param array $vars       variables to pass to the template, optional
+     * @param array  $vars      variables to pass to the template, optional
      * @throws Exception        ..when template not found
      */
     public function render($template, $vars = array()) {
