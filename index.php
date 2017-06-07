@@ -1,14 +1,14 @@
 <?php
 // get project URL path relative to the server document root
-$urlPath = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 $projectDir = basename(__DIR__);
-$dirPos = strpos($urlPath, $projectDir);
-$root = substr($urlPath, 0, $dirPos) . $projectDir;
+$root = explode($projectDir, $_SERVER['REQUEST_URI']);
+$root = $root[0] . $projectDir;
 
-define('ROOT', $root. '/');
+define('ROOT', $root . '/');
+unset($root);
 
 
-// this variable defines the folders which contain Class files, relative to this file
+// this variable defines the folders which contain Class files to be auto-loaded
 $classDirs = array(
     'Classes/Base',
     'Classes/Vendor',
