@@ -30,25 +30,28 @@ class ConfigHelper
      */
     private static function processValues($config) {
         // splits non-static method strings into a callable array
-        array_walk($config['routing']['routes'], function(&$route) {
-            $handler = &$route['handler'];
+        if (isset($config['routing']['routes'])) {
+            array_walk($config['routing']['routes'], function(&$route) {
+                $handler = &$route['handler'];
 
-            if (strpos($handler, '->') !== false) {
-                $handler = explode('->', $handler);
-                $handler = array(
-                    'class' => $handler[0],
-                    'method' => $handler[1]
-                );
-            }
+                if (strpos($handler, '->') !== false) {
+                    $handler = explode('->', $handler);
+                    $handler = array(
+                        'class' => $handler[0],
+                        'method' => $handler[1]
+                    );
+                }
 
-            return $route;
-        });
+                return $route;
+            });
+        }
 
         return $config;
     }
 
     /**
-     * Loops through the config until the given path is reached and returns the value
+     * Loops through the config until the given path is reached and returns the value.
+     * Returns null if the variable/path doesn't exist.
      *
      * The path can be a colon delimited string: 'foo:bar:baz'
      * or in PHP "key notation": 'foo[bar][baz]'
@@ -75,6 +78,7 @@ class ConfigHelper
             if (array_key_exists($key, $var)) {
                 $var = $var[$key];
             } else {
+                $var = null;
                 break;
             }
         }
@@ -91,7 +95,8 @@ class ConfigHelper
      * @return $this|mixed  returns only scalar values and null, no arrays because of chaining ability
      */
     public function __get($var) {
-        $var = ($this->currVar) ? $this->currVar[$var] : $this->config[$var];
+        $configVar = array_key_exists($var, $this->config) ? $this->config[$var] : null;
+        $var = array_key_exists($var, $this->currVar) ? $this->currVar[$var] : $configVar;
 
         if (!is_array($var)) {
             $this->currVar = array();

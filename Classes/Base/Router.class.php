@@ -13,7 +13,13 @@ class Router
         $path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
         $relativePath = str_replace(ROOT, '', $path);
 
-        foreach ($this->config->get('routing:routes') as $route) {
+        $routes = $this->config->get('routing:routes');
+
+        if ($routes == null) {
+            throw new Exception('There are no routes defined in the config.yml!');
+        }
+
+        foreach ($routes as $route) {
             $routeRegex = $this->buildRegexForRoute($route['pattern']);
 
             if (preg_match("/$routeRegex/i", $relativePath, $matches)) {
@@ -22,7 +28,9 @@ class Router
 
                 // give matches/parameters a named index (using variable name from route)
                 $params = array();
-                $paramNames = array_keys($this->config->get('routing:conditions'));
+                $conditions = $this->config->get('routing:conditions');
+                $paramNames = ($conditions) ? array_keys($conditions) : array();
+
                 foreach ($paramNames as $i => $name) {
                     $params[$name] = isset($matches[$i]) ? $matches[$i] : '';
                 }
