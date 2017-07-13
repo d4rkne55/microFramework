@@ -1,7 +1,19 @@
 RewriteEngine on
 
 # don't rewrite URLs that point to existing files
-# else the assets won't be available, as it redirects everything to index.php
+# else the assets won't be available, as..
 RewriteCond %{REQUEST_FILENAME} !-f
 
+# ..everything gets redirected to index.php
 RewriteRule ^(.*)$ index.php
+
+
+# prevent direct access to .php, .yml and Apache configuration files
+# excluding the needed index.php file
+<FilesMatch ".*\.(php|yml|ht.*)$">
+    Order Deny,Allow
+    Deny from all
+</FilesMatch>
+<Files index.php>
+    Allow from all
+</Files>
