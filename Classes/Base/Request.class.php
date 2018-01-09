@@ -9,7 +9,8 @@ class Request
 
     public function __construct($url = null) {
         if (!$url) {
-            $url = $_SERVER['REQUEST_URI'];
+            $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') ? 'https' : 'http';
+            $url = "$protocol://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
         }
 
         $defaults = array(
@@ -21,7 +22,10 @@ class Request
 
         if (isset($url['scheme'])) {
             $url['protocol'] = $url['scheme'];
-            unset($url['scheme']);
+        }
+
+        if (isset($url['host'])) {
+            $url['domain'] = $url['host'];
         }
 
         if (isset($url['query'])) {
@@ -38,6 +42,8 @@ class Request
             }
 
             $url['query'] = $query;
+        } else {
+            $url['query'] = '';
         }
 
         $url = array_merge($defaults, $url);

@@ -12,7 +12,7 @@ uploading or even deleting (via FTP) the files from the server - but well,
 that's a one time job, normally.
 IMO the sheer amount of files just didn't fit with my small project.
 
-So I thought about throwing framewoks overboard (never heard of micro frameworks before).
+So I thought about throwing frameworks overboard (never heard of micro frameworks before).
 But then it came to my mind that I had time and could create my *own* basic (micro) framework.
 
 And here I am. :D
@@ -40,12 +40,15 @@ And here I am. :D
   This is the default location it searches for templates.  
   More info at [View usage](#custom-tpl-dir)
 
+- **config.yml**  
+  This is the config file for the Framework.
+
 
 ## Usage
 
 ### Routing
 
-Currently the routes need to be defined in the Router class itself.  
+Routes are defined in the config file.  
 Everything should be explained in there.
 
 ### View
@@ -63,7 +66,7 @@ edit the `Base` class by passing the folder name to the initialization of the Vi
 
 ### Database
 
-For connecting to a database you just need to set the connection parameters in the `Base` class.
+For connecting to a database you just need to set the connection parameters in the config file.
 Like the View class, you access it via `$this->DB`.
 This framework uses [PDO](http://php.net/manual/de/book.pdo.php) by default.
 You may need to take a look at a [tutorial](https://phpdelusions.net/pdo) first.

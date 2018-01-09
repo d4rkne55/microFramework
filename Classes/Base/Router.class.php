@@ -2,8 +2,12 @@
 
 class Router
 {
-    /** @var ConfigHelper $config */
-    private $config = array();
+    /**
+     * This holds the ConfigHelper object containing the parsed config file
+     *
+     * @var ConfigHelper $config
+     */
+    private $config;
 
 
     public function __construct() {
@@ -33,9 +37,13 @@ class Router
                 $params = $this->buildParameters($matches);
 
                 call_user_func($callable, $params);
-                break;
+                return true;
             }
         }
+
+        // no route matched
+        http_response_code(404);
+        return false;
     }
 
     /**
@@ -50,8 +58,9 @@ class Router
         // replace variables with corresponding regex, including parentheses for matching
         $route = preg_replace_callback('/\(\$(\w+)\)/', function($matches) use ($varConditions) {
             $var = $matches[1];
+            $condition = isset($varConditions[$var]) ? $varConditions[$var] : '[^/]+';
 
-            return '(' . $varConditions[$var] . ')';
+            return "(?<$var>$condition)";
         }, $route);
 
         // escape slashes
@@ -74,11 +83,12 @@ class Router
         array_shift($matches);
 
         $params = array();
-        $conditions = $this->config->get('routing:conditions');
-        $conditionNames = ($conditions) ? array_keys($conditions) : array();
 
-        foreach ($conditionNames as $i => $name) {
-            $params[$name] = isset($matches[$i]) ? $matches[$i] : '';
+        foreach ($matches as $var => $match) {
+            // ignore numbered indexes from matches
+            if (!is_numeric($var)) {
+                $params[$var] = $match;
+            }
         }
 
         // add POST data to the params array, if POST request
