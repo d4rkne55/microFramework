@@ -3,11 +3,11 @@
 /**
  * Basic class for templating
  */
-// TODO: method for getting a template's markup without including it
-// TODO: some handling for using base templates (?)
 class View
 {
     protected $templateDir;
+    public $baseTemplate;
+    private $subOutput;
     private $vars = array();
 
 
@@ -33,10 +33,27 @@ class View
         $this->vars = $vars;
 
         if (file_exists($this->templateDir . $template)) {
+            ob_start();
             include($this->templateDir . $template);
+
+            $this->subOutput = ob_get_clean();
+
+            if ($this->baseTemplate) {
+                if (file_exists($this->templateDir . $this->baseTemplate)) {
+                    include($this->templateDir . $this->baseTemplate);
+                } else {
+                    throw new Exception('View: Template not found!');
+                }
+            } else {
+                echo $this->subOutput;
+            }
         } else {
             throw new Exception('View: Template not found!');
         }
+    }
+
+    public function renderSub() {
+        return $this->subOutput;
     }
 
     public function __get($var) {

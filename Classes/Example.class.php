@@ -6,7 +6,7 @@ class Example extends Base
         $request = new Request();
         $relativePath = str_replace(ROOT, '/', $request->get('path'));
 
-        $this->view->render('index.php', array(
+        $this->view->render('body.php', array(
             'uri' => $relativePath,
             'method' => $method,
             'query' => $query,
