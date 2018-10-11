@@ -22,10 +22,14 @@ class Router
             throw new Exception('Router: There are no routes defined in the config.yml!');
         }
 
+        $routeFound = false;
+
         foreach ($routes as $route) {
             $routeRegex = $this->buildRegexForRoute($route['pattern']);
 
             if (preg_match("/$routeRegex/i", $relativePath, $matches)) {
+                $routeFound = true;
+
                 $callable = $route['handler'];
 
                 // for non-static methods, create a class instance first
@@ -37,13 +41,13 @@ class Router
                 $params = $this->buildParameters($matches);
 
                 call_user_func($callable, $params);
-                return true;
+                break;
             }
         }
 
-        // no route matched
-        http_response_code(404);
-        return false;
+        if (!$routeFound) {
+            http_response_code(404);
+        }
     }
 
     /**
