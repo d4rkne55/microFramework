@@ -3,7 +3,7 @@
 class Example extends Base
 {
     public function showWelcomePage(array $query, $showDebug = false, $method = __METHOD__) {
-        $request = new Request();
+        $request = new UrlParser();
         $relativePath = str_replace(ROOT, '/', $request->get('path'));
 
         $this->view->render('body.php', array(

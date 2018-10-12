@@ -31,6 +31,8 @@ spl_autoload_register(function($class) use ($classDirs) {
 });
 
 
+DI::registerService('ConfigHelper', new ConfigHelper('config.yml'));
+
 /**
  * Instantiate the Router
  * there the routing takes place, which automatically calls the method belonging to the requested URL

@@ -1,6 +1,6 @@
 <?php
 
-class Request
+class UrlParser
 {
     private $url = array();
     private $queryString = '';

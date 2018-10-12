@@ -20,7 +20,7 @@ class Base
 
 
     public function __construct() {
-        $this->config = new ConfigHelper('config.yml');
+        $this->config = DI::getService('ConfigHelper');
 
         $this->view = new View();
 
