@@ -17,8 +17,7 @@ class UrlParser
     public function __construct($url = null) {
         // use current URL if nothing passed
         if (!$url) {
-            $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') ? 'https' : 'http';
-            $url = "$protocol://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+            $url = Request::getUrl();
         }
 
         $defaults = array(

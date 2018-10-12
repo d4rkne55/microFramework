@@ -48,7 +48,7 @@ class Router
         }
 
         if (!$routeFound) {
-            http_response_code(404);
+            Response::setCode(404);
         }
     }
 
