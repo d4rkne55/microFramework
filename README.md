@@ -23,7 +23,7 @@ And here I am. :D
 * Routing for cleaner URLs
 * Autoloader
 * View class
-* Request class
+* UrlParser class
 
 
 ## Structure
@@ -32,7 +32,7 @@ And here I am. :D
   Here the class files for your project should be placed.  
   The `Example.class.php` is such
   
-- **Classes/Base**  
+- **Classes/Framework**  
   This is the place for the internal classes of the framework.  
   Eg. the `Router.class.php`
   
@@ -53,7 +53,8 @@ Everything should be explained in there.
 
 ### View
 
-To render/include a template you can use the `render()` method of the View class.
+To render/include a template you can use the `render()` method of the View class,
+available via `$this->view`.
 
 Similar to Symfony, the first parameter is the file name and the second parameter
 can be an associative array with variables to pass to the template.
@@ -73,22 +74,24 @@ You may need to take a look at a [tutorial](https://phpdelusions.net/pdo) first.
 
 *You need to extend your class with the `Base` class to have this class available.*
 
-### Request
+### UrlParser
 
-This framework also contains a `Request` class for getting info about an Request/URL.  
+This framework also contains a `UrlParser` class for getting info about an URL.  
 By default, without parameters, it takes the current page.
 
 The info that can be get by the `get()` method is the same as in the
 [manual of parse_url()](http://php.net/manual/en/function.parse-url.php#refsect1-function.parse-url-returnvalues),  
-including the alias *'protocol'* for *'scheme'*.
+including the aliases *'protocol'* for *'scheme'* and *'domain'* for *'host'*.
 
 Examples:
 ```php
-$request = new Request('https://www.google.de/?q=search');
+$url = new UrlParser('https://www.google.de/?q=search');
 
-$path  = $request->get('path');
-$https = ($request->get('protocol') == 'https');
-$hasId = $request->query->has('q');
-$id    = $request->query->q;
-$query = $request->getFullQuery();
+$path  = $url->get('path');
+$https = ($url->get('protocol') == 'https');
+// also works like this via magic getters
+$port  = $url->port;
+$hasId = $url->query->has('q');
+$id    = $url->query->q;
+$query = $url->getFullQuery();
 ```
