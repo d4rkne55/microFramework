@@ -7,7 +7,8 @@ db_connection:
 
 routing:
     # This array consists of paths, with named variables in the form ($variable),
-    # and of the corresponding methods to be called when the path matches.
+    # and of the corresponding handlers to be called when the path matches.
+    # Optionally, the allowed Request method (GET, POST) can be specified via 'method'
     #
     # Paths are handled case-insensitive
     # The handlers are defined like in PHP code, classes of non-static methods get instantiated automatically
@@ -20,6 +21,10 @@ routing:
             handler: Example->showWithInfo
         -
             pattern: '($category)/($id)'
+            handler: Example->showWithInfo
+        -
+            pattern: '($category)/post'
+            method: POST
             handler: Example->showWithInfo
 
     # This array defines the regex to be matched for the variables in the route

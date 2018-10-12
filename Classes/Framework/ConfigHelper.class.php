@@ -34,6 +34,10 @@ class ConfigHelper
         // splits non-static method strings into a callable array
         if (isset($config['routing']['routes'])) {
             array_walk($config['routing']['routes'], function(&$route) {
+                if (isset($route['method'])) {
+                    $route['method'] = strtoupper($route['method']);
+                }
+
                 $handler = &$route['handler'];
 
                 if (strpos($handler, '->') !== false) {

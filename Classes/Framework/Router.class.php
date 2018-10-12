@@ -27,6 +27,10 @@ class Router
         $routeFound = false;
 
         foreach ($routes as $route) {
+            if (isset($route['method']) && $route['method'] != Request::getMethod()) {
+                continue;
+            }
+
             $routeRegex = $this->buildRegexForRoute($route['pattern']);
 
             if (preg_match("/$routeRegex/i", $relativePath, $matches)) {
@@ -79,7 +83,7 @@ class Router
     }
 
     /**
-     * Returns an associative array with the matched route variables/conditions and POST values
+     * Returns an associative array with the matched route variables
      *
      * @param array $matches
      * @return array
@@ -94,13 +98,6 @@ class Router
             // ignore numbered indexes from matches
             if (!is_numeric($var)) {
                 $params[$var] = $match;
-            }
-        }
-
-        // add POST data to the params array, if POST request
-        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            foreach ($_POST as $var => $value) {
-                $params[$var] = $value;
             }
         }
 
