@@ -10,9 +10,8 @@ unset($root);
 
 // this variable defines the folders which contain Class files to be auto-loaded
 $classDirs = array(
-    'Classes/Base',
-    'Classes/Vendor',
-    'Classes'
+    'Classes',
+    'Classes/Vendor'
 );
 
 /**
@@ -20,7 +19,10 @@ $classDirs = array(
  */
 spl_autoload_register(function($class) use ($classDirs) {
     foreach ($classDirs as $dir) {
+        // replace backslashes from namespace
+        $class = strtr($class, '\\', '/');
         $path = "$dir/$class.class.php";
+
         if (file_exists($path)) {
             require $path;
             break;
@@ -31,10 +33,10 @@ spl_autoload_register(function($class) use ($classDirs) {
 });
 
 
-DI::registerService(ConfigHelper::class, new ConfigHelper('config.yml'));
+Framework\DI::registerService(Framework\ConfigHelper::class, new Framework\ConfigHelper('config.yml'));
 
 /**
  * Instantiate the Router
  * there the routing takes place, which automatically calls the method belonging to the requested URL
  */
-new Router();
+new Framework\Router();

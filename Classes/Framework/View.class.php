@@ -1,5 +1,7 @@
 <?php
 
+namespace Framework;
+
 /**
  * Basic class for templating
  */
@@ -18,7 +20,7 @@ class View
         $this->templateDir = $templateDir;
 
         if (!file_exists($this->templateDir)) {
-            throw new Exception("View: Template directory doesn't exist.");
+            throw new \Exception("View: Template directory doesn't exist.");
         }
     }
 
@@ -54,7 +56,7 @@ class View
     /**
      * @param string $template
      * @return string
-     * @throws Exception
+     * @throws \Exception
      */
     private function safeInclude($template) {
         if (file_exists($this->templateDir . $template)) {
@@ -63,7 +65,7 @@ class View
 
             return ob_get_clean();
         } else {
-            throw new Exception("View: Template '$template' not found!");
+            throw new \Exception("View: Template '$template' not found!");
         }
     }
 

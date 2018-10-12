@@ -1,5 +1,7 @@
 <?php
 
+namespace Framework;
+
 class ConfigHelper
 {
     /**
@@ -18,7 +20,7 @@ class ConfigHelper
 
 
     public function __construct($file) {
-        $config = Spyc::YAMLLoad($file);
+        $config = \Spyc::YAMLLoad($file);
         $this->config = self::processValues($config);
     }
 

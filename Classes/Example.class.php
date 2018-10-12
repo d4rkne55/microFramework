@@ -1,5 +1,8 @@
 <?php
 
+use Framework\Base;
+use Framework\UrlParser;
+
 class Example extends Base
 {
     public function showWelcomePage(array $query, $showDebug = false, $method = __METHOD__) {

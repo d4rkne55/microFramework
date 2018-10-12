@@ -1,5 +1,7 @@
 <?php
 
+namespace Framework;
+
 class Router
 {
     /**
@@ -19,7 +21,7 @@ class Router
         $routes = $this->config->get('routing:routes');
 
         if ($routes == null) {
-            throw new Exception('Router: There are no routes defined in the config.yml!');
+            throw new \Exception('Router: There are no routes defined in the config.yml!');
         }
 
         $routeFound = false;

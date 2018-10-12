@@ -1,5 +1,7 @@
 <?php
 
+namespace Framework;
+
 /**
  * Class for providing so called 'Services'
  */
@@ -11,11 +13,11 @@ class DI
     /**
      * @param string $name
      * @return object
-     * @throws LogicException
+     * @throws \LogicException
      */
     public static function getService($name) {
         if (!isset(self::$services[$name])) {
-            throw new LogicException("Service isn't registered.");
+            throw new \LogicException("Service isn't registered.");
         }
 
         return self::$services[$name];
