@@ -20,7 +20,7 @@ class Base
 
 
     public function __construct() {
-        $this->config = DI::getService('ConfigHelper');
+        $this->config = DI::getService(ConfigHelper::class);
 
         $this->view = new View();
 

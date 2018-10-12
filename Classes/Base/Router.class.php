@@ -11,7 +11,7 @@ class Router
 
 
     public function __construct() {
-        $this->config = DI::getService('ConfigHelper');
+        $this->config = DI::getService(ConfigHelper::class);
 
         // get path relative to the project URL path
         $relativePath = str_replace(ROOT, '', $_SERVER['REQUEST_URI']);

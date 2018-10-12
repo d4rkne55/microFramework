@@ -31,7 +31,7 @@ spl_autoload_register(function($class) use ($classDirs) {
 });
 
 
-DI::registerService('ConfigHelper', new ConfigHelper('config.yml'));
+DI::registerService(ConfigHelper::class, new ConfigHelper('config.yml'));
 
 /**
  * Instantiate the Router
