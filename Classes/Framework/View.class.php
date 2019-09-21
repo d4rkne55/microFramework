@@ -13,6 +13,10 @@ class View
     private $vars = array();
 
 
+    /**
+     * @param string $templateDir
+     * @throws \RuntimeException
+     */
     public function __construct($templateDir = 'templates/') {
         if (substr($templateDir, -1) != '/') {
             $templateDir .= '/';
@@ -20,7 +24,7 @@ class View
         $this->templateDir = $templateDir;
 
         if (!file_exists($this->templateDir)) {
-            throw new \Exception("View: Template directory doesn't exist.");
+            throw new \RuntimeException("View: Template directory doesn't exist.");
         }
     }
 
@@ -29,6 +33,7 @@ class View
      *
      * @param string $template  filename of the template to render
      * @param array  $vars      variables to pass to the template, optional
+     * @throws \RuntimeException
      */
     public function render($template, $vars = array()) {
         if (count($vars) > 0) {
@@ -56,16 +61,16 @@ class View
     /**
      * @param string $template
      * @return string
-     * @throws \Exception
+     * @throws \RuntimeException
      */
     private function safeInclude($template) {
         if (file_exists($this->templateDir . $template)) {
             ob_start();
-            include($this->templateDir . $template);
+            include $this->templateDir . $template;
 
             return ob_get_clean();
         } else {
-            throw new \Exception("View: Template '$template' not found!");
+            throw new \RuntimeException("View: Template '$template' not found!");
         }
     }
 
