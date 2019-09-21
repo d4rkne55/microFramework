@@ -22,7 +22,8 @@ And here I am. :D
 
 * Routing for cleaner URLs
 * Autoloader
-* View class
+* Services
+* View class (for templating)
 * UrlParser class
 
 
@@ -69,7 +70,7 @@ edit the `Base` class by passing the folder name to the initialization of the Vi
 
 For connecting to a database you just need to set the connection parameters in the config file.
 Like the View class, you access it via `$this->DB`.
-This framework uses [PDO](http://php.net/manual/de/book.pdo.php) by default.
+This framework uses [PDO](https://www.php.net/manual/en/book.pdo.php) by default.
 You may need to take a look at a [tutorial](https://phpdelusions.net/pdo) first.
 
 *You need to extend your class with the `Base` class to have this class available.*
@@ -80,7 +81,7 @@ This framework also contains a `UrlParser` class for getting info about an URL.
 By default, without parameters, it takes the current page.
 
 The info that can be get by the `get()` method is the same as in the
-[manual of parse_url()](http://php.net/manual/en/function.parse-url.php#refsect1-function.parse-url-returnvalues),  
+[manual of parse_url()](https://www.php.net/manual/en/function.parse-url.php#refsect1-function.parse-url-returnvalues),  
 including the aliases *'protocol'* for *'scheme'* and *'domain'* for *'host'*.
 
 Examples:
